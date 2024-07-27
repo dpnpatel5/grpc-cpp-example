@@ -4,11 +4,11 @@
 #include <string>
 
 #include <grpcpp/grpcpp.h>
-#include "calculator_rpc.grpc.pb.h"
+#include "calculator.grpc.pb.h"
 
 int main(int argc, char** argv) {
   std::string target_str = "localhost:50051";
-  Calculator::Stub stub = Calculator::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
+  std::unique_ptr<Calculator::Stub> stub = Calculator::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
 
   AddRequest request;
   request.set_a(3);
@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
   AddReply reply;
   grpc::ClientContext context;
 
-  grpc::Status status = stub.Add(&context, request, &reply);
+  grpc::Status status = stub->Add(&context, request, &reply);
 
   if (status.ok()) {
     std::cout << "Sum: " << reply.result() << std::endl;

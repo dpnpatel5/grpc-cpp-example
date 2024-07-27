@@ -6,26 +6,28 @@
 #include <grpcpp/grpcpp.h>
 #include "calculator.grpc.pb.h"
 
-int main(int argc, char** argv) {
-  std::string target_str = "localhost:50051";
-  std::unique_ptr<Calculator::Stub> stub = Calculator::NewStub(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
-
-
-  AddRequest request;
-  request.set_a(3);
-  request.set_b(4);
-
-  AddReply reply;
-  grpc::ClientContext context;
-
-  grpc::Status status = stub->Add(&context, request, &reply);
-
-  if (status.ok()) {
-    std::cout << "Sum: " << reply.result() << std::endl;
-  } else {
-    std::cout << "gRPC call failed" << std::endl;
+class CalculatorServiceImpl final : public Calculator::Service {
+  grpc::Status Add(grpc::ServerContext* context, const AddRequest* request, AddReply* reply) override {
+    int result = request->a() + request->b();
+    reply->set_result(result);
+    return grpc::Status::OK;
   }
+};
 
+void RunServer() {
+  std::string server_address("0.0.0.0:50051");
+  CalculatorServiceImpl service;
+
+  grpc::ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(&service);
+  std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+  std::cout << "Server listening on " << server_address << std::endl;
+  server->Wait();
+}
+
+int main(int argc, char** argv) {
+  RunServer();
   return 0;
 }
 
