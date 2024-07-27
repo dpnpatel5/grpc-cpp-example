@@ -1,11 +1,11 @@
 // calculator.proto
 syntax = "proto3";
-
+package calculator_rpc;
 service Calculator {
   rpc Add (AddRequest) returns (AddReply);
   rpc Sub (SubRequest) returns (SubReply);
   rpc Mul (MulRequest) returns (MulReply);
-  rpc Dev (DevRequest) returns (DevReply);
+  rpc Div (DivRequest) returns (DivReply);
 }
 
 message AddRequest {
@@ -32,11 +32,11 @@ message MulRequest {
 message MulReply {
   int32 result = 1;
 }
-message DevRequest {
+message DivRequest {
   int32 a = 1;
   int32 b = 2;
 }
 
-message DevReply {
+message DivReply {
   int32 result = 1;
 }

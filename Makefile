@@ -24,12 +24,15 @@ calculator_server: calculator.pb.o calculator.grpc.pb.o calculator_server.o
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 # Client target
-calculator_client: calculator.pb.o calculator.grpc.pb.o calculator_client.o 
+calculator_client: calculator.pb.o calculator.grpc.pb.o calculator_client.o calculator_api.o 
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 # Object file rules
 %.o: %.cpp
 	$(CXX) -o $@ -c $(CPPFLAGS) $(CXXFLAGS) $<
+
+%.o: %.c
+	$(CXX) -o $@ -c $(CFLAGS) $^
 
 # Generate Protobuf and gRPC source files
 %.pb.cc %.pb.h %.grpc.pb.cc %.grpc.pb.h: %.proto
