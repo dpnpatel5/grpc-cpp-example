@@ -1,0 +1,42 @@
+// calculator.proto
+syntax = "proto3";
+
+service Calculator {
+  rpc Add (AddRequest) returns (AddReply);
+  rpc Sub (SubRequest) returns (SubReply);
+  rpc Mul (MulRequest) returns (MulReply);
+  rpc Dev (DevRequest) returns (DevReply);
+}
+
+message AddRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message AddReply {
+  int32 result = 1;
+}
+message SubRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message SubReply {
+  int32 result = 1;
+}
+message MulRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message MulReply {
+  int32 result = 1;
+}
+message DevRequest {
+  int32 a = 1;
+  int32 b = 2;
+}
+
+message DevReply {
+  int32 result = 1;
+}
